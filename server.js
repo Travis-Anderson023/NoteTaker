@@ -22,13 +22,18 @@ app.get('/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
     //saves note to db
     fs.readFile(path.join(__dirname, './db/db.json'), (err, data) => {
-        if (err) throw err;
+        if (err) {
+            throw err;
+        }
         const oldNotes = JSON.parse(data);
         const newNote = req.body;
         newNote.id = uuid();
         oldNotes.push(newNote);
         fs.writeFile(path.join(__dirname, './db/db.json'), JSON.stringify(oldNotes), (err) => {
-            if (err) throw err;
+            if (err) {
+                throw err;
+            }
+            res.sendStatus(200);
         });
     });
 });
@@ -51,12 +56,10 @@ app.delete('/api/notes/:id', (req, res) => {
         const newNotes = oldNotes.filter(note => note.id !== noteId);
         fs.writeFile(path.join(__dirname, './db/db.json'), JSON.stringify(newNotes), (err) => {
             if (err) throw err;
+            res.sendStatus(200);
         });
     });
 });
-
-    
-
 
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
