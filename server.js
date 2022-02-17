@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const uuid = require('uuid-random');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.post('/api/notes', (req, res) => {
         if (err) throw err;
         const oldNotes = JSON.parse(data);
         const newNote = req.body;
+        newNote.id = uuid();
         oldNotes.push(newNote);
         fs.writeFile(path.join(__dirname, './db/db.json'), JSON.stringify(oldNotes), (err) => {
             if (err) throw err;
